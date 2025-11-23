@@ -6,6 +6,8 @@ A simple python application that helps you learn SQL right from your command lin
 
 ![Help page screenshot](public/help.png)
 
+![Hint page screenshot](public/hint.png)
+
 ## Getting Started
 - Requirements 
   - ```python: 3.13.3```
