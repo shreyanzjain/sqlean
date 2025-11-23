@@ -1,0 +1,91 @@
+module_title: "Basic Queries"
+lessons:
+  - id: 1
+    title: "Selecting All Columns"
+    text: "The `SELECT *` statement is used to fetch all columns from a table."
+    exercise: "Select all columns from the 'employees' table."
+    schema_snippet: "employees (id, first_name, last_name, department, salary)"
+    hint: "Don't forget the `*` and make sure to specify the `FROM` table."
+    validation_type: "results_match"
+    solution_query: "SELECT * FROM employees;"
+
+  - id: 2
+    title: "Selecting Specific Columns"
+    text: "You can select specific columns by listing their names, separated by commas."
+    exercise: "Select just the 'first_name' and 'salary' from the 'employees' table."
+    schema_snippet: "employees (id, first_name, last_name, department, salary)"
+    hint: "Separate column names with a comma: `SELECT col1, col2 FROM ...`"
+    validation_type: "results_match"
+    solution_query: "SELECT first_name, salary FROM employees;"
+
+  - id: 3
+    title: "Filtering with WHERE"
+    text: "The `WHERE` clause is used to filter records. It returns only those records that fulfill a specified condition."
+    exercise: "Select the 'first_name' and 'salary' of all employees in the 'Engineering' department."
+    schema_snippet: "employees (id, first_name, last_name, department, salary)"
+    hint: "Use `WHERE department = 'Engineering'`. Remember that text values must be in single quotes."
+    validation_type: "results_match"
+    solution_query: "SELECT first_name, salary FROM employees WHERE department = 'Engineering';"
+
+  - id: 4
+    title: "Using AND"
+    text: "The `AND` operator displays a record if all the conditions separated by `AND` are TRUE."
+    exercise: "Select all employees in the 'Engineering' department who have a salary greater than 115000."
+    schema_snippet: "employees (id, first_name, last_name, department, salary)"
+    hint: "You will need to use `WHERE ... AND ...`"
+    validation_type: "results_match"
+    solution_query: "SELECT * FROM employees WHERE department = 'Engineering' AND salary > 115000;"
+
+  - id: 5
+    title: "Using OR"
+    text: "The `OR` operator displays a record if any of the conditions separated by `OR` is TRUE."
+    exercise: "Select all employees who are either in the 'Sales' department OR the 'Marketing' department."
+    schema_snippet: "employees (id, first_name, last_name, department, salary)"
+    hint: "Use `WHERE ... OR ...`"
+    validation_type: "results_match"
+    solution_query: "SELECT * FROM employees WHERE department = 'Sales' OR department = 'Marketing';"
+
+  - id: 6
+    title: "Using IN"
+    text: "The `IN` operator is a shorthand for multiple `OR` conditions. It allows you to specify multiple values in a `WHERE` clause."
+    exercise: "Select all employees who are in the 'Sales' or 'Marketing' department, but this time, use the `IN` operator."
+    schema_snippet: "employees (id, first_name, last_name, department, salary)"
+    hint: "The syntax is `WHERE column_name IN ('value1', 'value2')`"
+    validation_type: "results_match"
+    solution_query: "SELECT * FROM employees WHERE department IN ('Sales', 'Marketing');"
+
+  - id: 7
+    title: "Using LIKE"
+    text: "The `LIKE` operator is used in a `WHERE` clause to search for a specified pattern. The percent sign (`%`) represents zero, one, or multiple characters."
+    exercise: "Select all employees whose 'first_name' starts with the letter 'A'."
+    schema_snippet: "employees (id, first_name, last_name, department, salary)"
+    hint: "Use `WHERE first_name LIKE 'A%'`"
+    validation_type: "results_match"
+    solution_query: "SELECT * FROM employees WHERE first_name LIKE 'A%';"
+
+  - id: 8
+    title: "Ordering Results"
+    text: "The `ORDER BY` keyword is used to sort the result-set in ascending (ASC) or descending (DESC) order."
+    exercise: "Select the 'first_name' and 'salary' of all employees, sorted by salary from highest to lowest."
+    schema_snippet: "employees (id, first_name, last_name, department, salary)"
+    hint: "Use `ORDER BY salary DESC` at the end of your query."
+    validation_type: "results_match"
+    solution_query: "SELECT first_name, salary FROM employees ORDER BY salary DESC;"
+
+  - id: 9
+    title: "Limiting Results"
+    text: "The `LIMIT` clause is used to specify the maximum number of records to return."
+    exercise: "Select the top 3 highest-paid employees. (Hint: You will need to combine `ORDER BY` and `LIMIT`)"
+    schema_snippet: "employees (id, first_name, last_name, department, salary)"
+    hint: "First, order by salary descending, then add `LIMIT 3`."
+    validation_type: "results_match"
+    solution_query: "SELECT first_name, salary FROM employees ORDER BY salary DESC LIMIT 3;"
+
+  - id: 10
+    title: "Aggregate: AVG"
+    text: "An aggregate function performs a calculation on a set of rows and returns a single value. `AVG()` returns the average value of a numeric column."
+    exercise: "Find the average salary of all employees in the 'Engineering' department."
+    schema_snippet: "employees (id, first_name, last_name, department, salary)"
+    hint: "Use `SELECT AVG(salary) FROM employees WHERE ...`"
+    validation_type: "results_match"
+    solution_query: "SELECT AVG(salary) FROM employees WHERE department = 'Engineering';"

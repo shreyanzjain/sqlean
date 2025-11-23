@@ -1,0 +1,11 @@
+course_title: "The Complete SQL Tutorial"
+modules:
+  - id: "01_select"
+    title: "Basic SELECT Statements"
+    file: "01_select.yml"
+    dataset: "employees_db"
+  
+  - id: "02_joins"
+    title: "Joining Tables"
+    file: "02_joins.yml"
+    dataset: "music_store_db"

@@ -1,0 +1,94 @@
+module_title: "Joining Tables & Grouping"
+lessons:
+  - id: 1
+    title: "Using INNER JOIN"
+    text: "An `INNER JOIN` selects records that have matching values in both tables. We will join `artists` and `albums` on the artist ID."
+    exercise: "Select the artist's name and the album's title for all albums."
+    schema_snippet: "artists (id, name) | albums (id, title, artist_id)"
+    hint: "Use `FROM artists INNER JOIN albums ON artists.id = albums.artist_id`"
+    validation_type: "results_match"
+    solution_query: "SELECT artists.name, albums.title FROM artists INNER JOIN albums ON artists.id = albums.artist_id;"
+
+  - id: 2
+    title: "Using LEFT JOIN"
+    text: "A `LEFT JOIN` returns all records from the left table (`artists`), and the matched records from the right table (`albums`). If there is no match, the right side will contain `NULL`."
+    exercise: "Select all artist names and their album titles. Include artists even if they have no albums. (We added a new artist, 'Radiohead', who has no albums)."
+    schema_snippet: "artists (id, name) | albums (id, title, artist_id)"
+    hint: "Use `FROM artists LEFT JOIN albums ON artists.id = albums.artist_id`"
+    validation_type: "keyword_check"
+    required_keywords: ["LEFT JOIN"]
+    solution_query: "INSERT INTO artists (id, name) VALUES (4, 'Radiohead'); SELECT artists.name, albums.title FROM artists LEFT JOIN albums ON artists.id = albums.artist_id;"
+
+  - id: 3
+    title: "Three-Table JOIN"
+    text: "You can chain `JOIN` clauses to link multiple tables. Let's find all tracks, their album title, and the artist's name."
+    exercise: "Select the artist name, album title, and track name for all tracks."
+    schema_snippet: "artists -> albums -> tracks"
+    hint: "You will need two `JOIN` clauses. `artists JOIN albums ... JOIN tracks ...`"
+    validation_type: "results_match"
+    solution_query: "SELECT artists.name, albums.title, tracks.track_name FROM artists JOIN albums ON artists.id = albums.artist_id JOIN tracks ON albums.id = tracks.album_id;"
+
+  - id: 4
+    title: "JOIN with WHERE"
+    text: "You can filter the results of a `JOIN` by adding a `WHERE` clause after the `ON` clauses."
+    exercise: "Select all track names from the album 'Abbey Road'."
+    schema_snippet: "albums (id, title, artist_id) | tracks (id, track_name, album_id)"
+    hint: "Join `albums` and `tracks`, then use `WHERE albums.title = 'Abbey Road'`."
+    validation_type: "results_match"
+    solution_query: "SELECT tracks.track_name FROM albums JOIN tracks ON albums.id = tracks.album_id WHERE albums.title = 'Abbey Road';"
+
+  - id: 5
+    title: "JOIN with WHERE (Part 2)"
+    text: "Let's try a more complex filter. This time, filter by the *artist's* name."
+    exercise: "Select all track names by the artist 'The Beatles'."
+    schema_snippet: "artists -> albums -> tracks"
+    hint: "You'll need to join all three tables, then filter with `WHERE artists.name = 'The Beatles'`."
+    validation_type: "results_match"
+    solution_query: "SELECT tracks.track_name FROM artists JOIN albums ON artists.id = albums.artist_id JOIN tracks ON albums.id = tracks.album_id WHERE artists.name = 'The Beatles';"
+
+  - id: 6
+    title: "Grouping Results"
+    text: "The `GROUP BY` statement groups rows that have the same values into summary rows. It's often used with aggregate functions like `COUNT()`."
+    exercise: "Count the number of albums each artist has. Show the artist's name and their album count."
+    schema_snippet: "artists (id, name) | albums (id, title, artist_id)"
+    hint: "Use `SELECT artists.name, COUNT(albums.id) ... GROUP BY artists.name`."
+    validation_type: "results_match"
+    solution_query: "SELECT artists.name, COUNT(albums.id) FROM artists LEFT JOIN albums ON artists.id = albums.artist_id GROUP BY artists.name;"
+
+  - id: 7
+    title: "Filtering Groups with HAVING"
+    text: "`WHERE` filters rows *before* they are grouped. `HAVING` filters groups *after* they are grouped."
+    exercise: "Show all artists who have *more than one* album. Show the artist's name and their album count."
+    schema_snippet: "artists (id, name) | albums (id, title, artist_id)"
+    hint: "First, `GROUP BY` artist, then use `HAVING COUNT(albums.id) > 1`."
+    validation_type: "results_match"
+    solution_query: "SELECT artists.name, COUNT(albums.id) FROM artists JOIN albums ON artists.id = albums.artist_id GROUP BY artists.name HAVING COUNT(albums.id) > 1;"
+
+  - id: 8
+    title: "Grouping and Ordering"
+    text: "You can combine `GROUP BY` with `ORDER BY` to sort your grouped results."
+    exercise: "Count the number of albums each artist has, and order the list by the count, from highest to lowest."
+    schema_snippet: "artists (id, name) | albums (id, title, artist_id)"
+    hint: "Use `GROUP BY` first, then `ORDER BY COUNT(albums.id) DESC`."
+    validation_type: "results_match"
+    solution_query: "SELECT artists.name, COUNT(albums.id) FROM artists LEFT JOIN albums ON artists.id = albums.artist_id GROUP BY artists.name ORDER BY COUNT(albums.id) DESC;"
+
+  - id: 9
+    title: "Aggregate with JOIN"
+    text: "Let's combine `JOIN`, `WHERE`, and an aggregate function like `SUM()`."
+    exercise: "Calculate the total duration (in seconds) of all tracks by 'Pink Floyd'."
+    schema_snippet: "artists -> albums -> tracks"
+    hint: "Join all three tables, filter by artist name, and use `SELECT SUM(tracks.duration_sec)`."
+    validation_type: "results_match"
+    solution_query: "SELECT SUM(tracks.duration_sec) FROM tracks JOIN albums ON tracks.album_id = albums.id JOIN artists ON albums.artist_id = artists.id WHERE artists.name = 'Pink Floyd';"
+
+  - id: 10
+    title: "Deleting Records"
+    text: "The `DELETE` statement is used to delete existing records in a table."
+    exercise: "Delete the track 'Money' from the 'tracks' table."
+    schema_snippet: "tracks (id, track_name, album_id, duration_sec)"
+    hint: "Use `DELETE FROM tracks WHERE track_name = 'Money'`"
+    validation_type: "state_check"
+    solution_query: "DELETE FROM tracks WHERE track_name = 'Money';"
+    validation_query: "SELECT COUNT(*) FROM tracks WHERE track_name = 'Money';"
+    expected_results: [[0]]
